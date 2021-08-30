@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-#[derive(Default, Serialize, Clone, Debug)]
+#[derive(Serialize, Clone, Debug)]
 pub struct Embed<'a> {
     /// title of embed
     pub title:          Option<&'a str>,
@@ -35,16 +35,34 @@ pub struct Embed<'a> {
     pub fields:         Option<Vec<EmbedField<'a>>>
 }
 
+impl<'a> Default for Embed<'a> {
+    fn default() -> Self {
+        Embed {
+            title:          None,
+            r#type:         "rich",
+            description:    None,
+            url:            None,
+            timestamp:      None,
+            color:          None,
+            footer:         None,
+            image:          None,
+            thumbnail:      None,
+            video:          None,
+            provider:       None,
+            author:         None,
+            fields:         None
+        }
+    }
+}
+
+#[derive(Default)]
 pub struct EmbedBuilder<'a> {
     inner: Embed<'a>
 }
 
 impl<'a> EmbedBuilder<'a> {
     pub fn new() -> Self {
-        let mut inner = Embed::default();
-        inner.r#type = "rich";
-
-        Self { inner }
+        Self { inner: Default::default() }
     }
 
     pub fn set_title(mut self, title: &'a str) -> Self {
@@ -127,6 +145,7 @@ pub struct EmbedFooter<'a> {
     pub proxy_icon_url: Option<&'a str>
 }
 
+#[derive(Default)]
 pub struct EmbedFooterBuilder<'a> {
     inner: EmbedFooter<'a>
 }
@@ -168,6 +187,7 @@ pub struct EmbedImage<'a> {
     pub width:          Option<i32>,
 }
 
+#[derive(Default)]
 pub struct EmbedImageBuilder<'a> {
     inner: EmbedImage<'a>
 }
@@ -214,6 +234,7 @@ pub struct EmbedThumbnail<'a> {
     pub width:          Option<i32>,
 }
 
+#[derive(Default)]
 pub struct EmbedThumbnailBuilder<'a> {
     inner: EmbedThumbnail<'a>
 }
@@ -256,6 +277,7 @@ pub struct EmbedProvider<'a> {
     pub url:            Option<&'a str>
 }
 
+#[derive(Default)]
 pub struct EmbedProviderBuilder<'a> {
     inner: EmbedProvider<'a>
 }
@@ -292,6 +314,7 @@ pub struct EmbedAuthor<'a> {
     pub proxy_icon_url: Option<&'a str>
 }
 
+#[derive(Default)]
 pub struct EmbedAuthorBuilder<'a> {
     inner: EmbedAuthor<'a>
 }
@@ -338,6 +361,7 @@ pub struct EmbedVideo<'a> {
     pub width:          Option<i32>,
 }
 
+#[derive(Default)]
 pub struct EmbedVideoBuilder<'a> {
     inner: EmbedVideo<'a>
 }
@@ -382,6 +406,7 @@ pub struct EmbedField<'a> {
     pub inline:         Option<bool>
 }
 
+#[derive(Default)]
 pub struct EmbedFieldBuilder<'a> {
     inner: EmbedField<'a>
 }

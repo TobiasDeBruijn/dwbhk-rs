@@ -12,13 +12,14 @@ pub struct Webhook<'a> {
     /// true if this is a TTS message
     pub tts:                Option<bool>,
     /// the contents of the file being sent
-    pub file:               Option<&'a Vec<u8>>,
+    pub file:               Option<&'a [u8]>,
     /// embedded rich content
     pub embeds:             Option<Vec<Embed<'a>>>,
     /// allowed mentions for the message
     pub allowed_mentions:   Option<&'a AllowedMention<'a>>,
 }
 
+#[derive(Default)]
 pub struct WebhookBuilder<'a> {
     inner: Webhook<'a>
 }
@@ -48,7 +49,7 @@ impl<'a> WebhookBuilder<'a> {
         self
     }
 
-    pub fn set_file(mut self, file: &'a Vec<u8>) -> Self {
+    pub fn set_file(mut self, file: &'a [u8]) -> Self {
         self.inner.file = Some(file);
         self
     }
@@ -94,6 +95,7 @@ pub struct AllowedMention<'a> {
     pub replied_user:       bool
 }
 
+#[derive(Default)]
 pub struct AllowedMentionBuilder<'a> {
     inner: AllowedMention<'a>
 }

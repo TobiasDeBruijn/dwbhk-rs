@@ -14,6 +14,7 @@ pub struct WebhookRequest<'a> {
     pub file_name:  Option<&'a str>
 }
 
+#[derive(Default)]
 pub struct WebhookRequestBuilder<'a> {
     inner: WebhookRequest<'a>
 }
