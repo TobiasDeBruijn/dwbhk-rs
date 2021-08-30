@@ -9,6 +9,7 @@ keywords = ["Discord", "Webhook", "embeds", "file"]
 homepage = "https://github.com/TheDutchMC/dwbhk-rs"
 description = "dwbhk-rs is a library for working with Discord Webhooks"
 categories = ["api-bindings", "asynchronous"]
+repository = "https://github.com/TheDutchMC/dwbhk-rs"
 
 [dependencies]
 lazy_static = "1.4.0"

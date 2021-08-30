@@ -30,6 +30,15 @@
 //! req.execute_url(&url);
 //! ```
 
+#![warn(rust_2018_idioms)]
+#![warn(clippy::cargo)]
+#![warn(clippy::decimal_literal_representation)]
+#![warn(clippy::if_not_else)]
+#![warn(clippy::large_digit_groups)]
+#![warn(clippy::missing_docs_in_private_items)]
+#![warn(clippy::missing_errors_doc)]
+#![warn(clippy::needless_continue)]
+
 mod types;
 pub use types::*;
 
