@@ -26,8 +26,8 @@
 //!    )
 //!    .build();
 //!
-//! let url = get_discord_webhook_url();
-//! req.execute_url(&url);
+//! let url = "YOUR_WEBHOOK";
+//! req.execute_url(url);
 //! ```
 
 #![warn(rust_2018_idioms)]
@@ -82,6 +82,7 @@ mod test {
             .unwrap();
         let _guard = rt.enter();
 
-        rt.block_on(req.execute_url(&url)).unwrap();
+        rt.block_on(req.clone().execute_url(&url)).unwrap();
+        req.execute_url_sync(&url).unwrap();
     }
 }

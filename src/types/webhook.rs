@@ -88,12 +88,18 @@ impl<'a> WebhookBuilder<'a> {
         let embeds = self.inner.embeds.is_some();
 
         if !(content ^ file ^ embeds) {
-            panic!("You can only supply one of 'file', 'content' or 'embeds', not more than one.");
+            #[cfg(not(feature = "no-panic"))]
+            {
+                panic!("You can only supply one of 'file', 'content' or 'embeds', not more than one.");
+            }
         }
 
         if let Some(embeds) = &self.inner.embeds {
             if embeds.len() > 10 {
-                panic!("You may supply up to 10 embeds, not more");
+                #[cfg(not(feature = "no-panic"))]
+                {
+                    panic!("You may supply up to 10 embeds, not more");
+                }
             }
         }
 
@@ -136,7 +142,10 @@ impl<'a> AllowedMentionBuilder<'a> {
     /// Array of role_ids to mention (Max size of 100)
     pub fn set_roles(mut self, roles: Vec<&'a str>) -> Self {
         if roles.len() > 100 {
-            panic!("The max size for the roles vec is 100");
+            #[cfg(not(feature = "no-panic"))]
+            {
+                panic!("The max size for the roles vec is 100");
+            }
         }
 
         self.inner.roles = roles;
@@ -146,7 +155,10 @@ impl<'a> AllowedMentionBuilder<'a> {
     /// Array of user_ids to mention (Max size of 100)
     pub fn set_users(mut self, users: Vec<&'a str>) -> Self {
         if users.len() > 100 {
-            panic!("The max size for the users vec is 100");
+            #[cfg(not(feature = "no-panic"))]
+            {
+                panic!("The max size for the users vec is 100");
+            }
         }
 
         self.inner.users = users;

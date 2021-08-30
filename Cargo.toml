@@ -10,6 +10,7 @@ homepage = "https://github.com/TheDutchMC/dwbhk-rs"
 description = "dwbhk-rs is a library for working with Discord Webhooks"
 categories = ["api-bindings", "asynchronous"]
 repository = "https://github.com/TheDutchMC/dwbhk-rs"
+resolver = "2"
 
 [dependencies]
 lazy_static = "1.4.0"
@@ -25,3 +26,11 @@ features = ["rustls-tls", "json"]
 [dev-dependencies.tokio]
 version = "1.10.1"
 features = ["rt"]
+
+[features]
+no-panic = []
+blocking = ["reqwest/blocking"]
+
+[dev-dependencies.dwbhk]
+path = "."
+features = ["blocking"]

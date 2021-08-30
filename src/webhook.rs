@@ -49,7 +49,10 @@ impl<'a> WebhookRequestBuilder<'a> {
     /// Panics if a file name has not been set and a file is to be uploaded
     pub fn build(self) -> WebhookRequest<'a> {
         if self.inner.data.file.is_some() && self.inner.file_name.is_none() {
-            panic!("You must set a file name if you are uploading a file");
+            #[cfg(not(feature = "no-panic"))]
+            {
+                panic!("You must set a file name if you are uploading a file");
+            }
         }
 
         self.inner
@@ -85,5 +88,49 @@ impl<'a> WebhookRequest<'a> {
         }
 
         req_builder.send().await
+    }
+}
+
+#[cfg(feature = "blocking")]
+pub mod blocking {
+    use crate::WebhookRequest;
+    use reqwest::blocking::Response;
+    use reqwest::Error;
+    use lazy_static::lazy_static;
+
+    lazy_static! {
+        static ref BLOCKING_HTTP_CLIENT: reqwest::blocking::Client = reqwest::blocking::Client::new();
+    }
+
+    impl<'a> WebhookRequest<'a> {
+        /// Execute the current webhook request to the target URL
+        ///
+        /// # Errors
+        /// - When the request fails
+        pub fn execute_url_sync(&self, url: &str) -> Result<Response, Error> {
+            let mut req_builder = BLOCKING_HTTP_CLIENT.post(url)
+                .json(&self.data);
+
+            if let Some(f) = self.file_name {
+                req_builder = req_builder.header("Content-Disposition", f);
+            }
+
+            req_builder.send()
+        }
+
+        /// Execute the current webhook request to a target URL build from the given `id` and `token`
+        ///
+        /// # Errors
+        /// - When the request fails
+        pub fn execute_sync(&self, id: &str, token: &str) -> Result<Response, Error> {
+            let mut req_builder = BLOCKING_HTTP_CLIENT.post(format!("https://discord.com/api/webhooks/{}/{}", id, token))
+                .json(&self.data);
+
+            if let Some(f) = self.file_name {
+                req_builder = req_builder.header("Content-Disposition", f);
+            }
+
+            req_builder.send()
+        }
     }
 }
