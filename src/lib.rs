@@ -1,5 +1,9 @@
 //! dwbhk is a Rust library for firing a Discord webhook
 //!
+//! ## Features
+//! - `no-panic` Disables `panic!` in the crate
+//! - `blocking` Enables `reqwest`'s `blocking` feature. One can use the blocking methods with the `execute_url_sync` and `execute_sync` on `WebhookRequest`
+//!
 //! ## Usage
 //! Example usage:
 //! ```no_run
