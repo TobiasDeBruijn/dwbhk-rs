@@ -1,6 +1,6 @@
 [package]
 name = "dwbhk"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2018"
 authors = ["Tobias de Bruijn <t.debruijn@array21.dev>"]
 license = "MIT OR Apache-2.0"
