@@ -15,7 +15,7 @@ pub struct WebhookRequest<'a> {
     /// The Webhook's payload
     pub data:       Webhook<'a>,
     /// The name of the File to be send, if there is any
-    pub file_name:  Option<&'a str>
+    pub file_name:  Option<String>
 }
 
 /// Builder for WebhookRequest
@@ -38,8 +38,8 @@ impl<'a> WebhookRequestBuilder<'a> {
     }
 
     /// Set the filename to be used for an uploaded file
-    pub fn set_file_name(mut self, file_name: &'a str) -> Self {
-        self.inner.file_name = Some(file_name);
+    pub fn set_file_name<S: 'a + AsRef<str>>(mut self, file_name: S) -> Self {
+        self.inner.file_name = Some(file_name.as_ref().to_string());
         self
     }
 
@@ -64,11 +64,11 @@ impl<'a> WebhookRequest<'a> {
     ///
     /// # Errors
     /// - When the request fails
-    pub async fn execute_url(&self, url: &str) -> Result<Response, Error> {
-        let mut req_builder = HTTP_CLIENT.post(url)
+    pub async fn execute_url<S: AsRef<str>>(&self, url: S) -> Result<Response, Error> {
+        let mut req_builder = HTTP_CLIENT.post(url.as_ref())
             .json(&self.data);
 
-        if let Some(f) = self.file_name {
+        if let Some(f) = &self.file_name {
             req_builder = req_builder.header("Content-Disposition", f);
         }
 
@@ -79,11 +79,11 @@ impl<'a> WebhookRequest<'a> {
     ///
     /// # Errors
     /// - When the request fails
-    pub async fn execute(&self, id: &str, token: &str) -> Result<Response, Error> {
-        let mut req_builder = HTTP_CLIENT.post(format!("https://discord.com/api/webhooks/{}/{}", id, token))
+    pub async fn execute<A: AsRef<str>, B: AsRef<str>>(&self, id: A, token: B) -> Result<Response, Error> {
+        let mut req_builder = HTTP_CLIENT.post(format!("https://discord.com/api/webhooks/{}/{}", id.as_ref(), token.as_ref()))
             .json(&self.data);
 
-        if let Some(f) = self.file_name {
+        if let Some(f) = &self.file_name {
             req_builder = req_builder.header("Content-Disposition", f);
         }
 
@@ -107,11 +107,11 @@ pub mod blocking {
         ///
         /// # Errors
         /// - When the request fails
-        pub fn execute_url_sync(&self, url: &str) -> Result<Response, Error> {
-            let mut req_builder = BLOCKING_HTTP_CLIENT.post(url)
+        pub fn execute_url_sync<S: AsRef<str>>(&self, url: S) -> Result<Response, Error> {
+            let mut req_builder = BLOCKING_HTTP_CLIENT.post(url.as_ref())
                 .json(&self.data);
 
-            if let Some(f) = self.file_name {
+            if let Some(f) = &self.file_name {
                 req_builder = req_builder.header("Content-Disposition", f);
             }
 
@@ -122,11 +122,11 @@ pub mod blocking {
         ///
         /// # Errors
         /// - When the request fails
-        pub fn execute_sync(&self, id: &str, token: &str) -> Result<Response, Error> {
-            let mut req_builder = BLOCKING_HTTP_CLIENT.post(format!("https://discord.com/api/webhooks/{}/{}", id, token))
+        pub fn execute_sync<A: AsRef<str>, B: AsRef<str>>(&self, id: A, token: B) -> Result<Response, Error> {
+            let mut req_builder = BLOCKING_HTTP_CLIENT.post(format!("https://discord.com/api/webhooks/{}/{}", id.as_ref(), token.as_ref()))
                 .json(&self.data);
 
-            if let Some(f) = self.file_name {
+            if let Some(f) = &self.file_name {
                 req_builder = req_builder.header("Content-Disposition", f);
             }
 
